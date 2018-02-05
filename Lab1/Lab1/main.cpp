@@ -61,6 +61,18 @@ int main()
 		cout << "\n\n" << pointers[i]->getGrossPrice();
 	}
 
+
+	//Now we call the sort function
+	//http://www.cplusplus.com/articles/NhA0RXSz/
+	sort(pointers, pointers + arraySize);
+
+	cout << "Sorted Array looks like this." << endl;
+	for (size_t i = 0; i != arraySize; ++i)
+		cout << pointers[i]->getGrossPrice() << " ";
+
+
+
+
 	cout << "\n\n";
 	system("pause");
 	return 0;
