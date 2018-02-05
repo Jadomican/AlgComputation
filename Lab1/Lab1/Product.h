@@ -12,7 +12,7 @@ class Product
 {
 public:
 	Product(double);
-	double getGrossPrice();
+	virtual double getGrossPrice();
 
 protected:
 	double netPrice;

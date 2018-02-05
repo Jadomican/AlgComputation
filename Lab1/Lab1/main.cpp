@@ -1,6 +1,8 @@
 //X00119321 Jason Domican Lab 7B
 
 #include <iostream>
+#include <algorithm>
+
 #include "Product.h"
 #include "Software.h"
 #include "Books.h"
@@ -8,16 +10,7 @@ using namespace std;
 
 int main()
 {
-	//Product* p = new Product(5);
-
-	//cout << p->getGrossPrice();
-	//cout << "\n\n";
-
-
-	//Books* b = new Books(10);
-	//cout << b->getGrossPrice();
-	//cout << "\n\n";
-
+	int const arraySize = 8;
 
 	Product* pointers[8];
 
@@ -26,11 +19,11 @@ int main()
 	Software* software;
 
 	double price;
-	cout << "Enter book details";
+	cout << "Enter book price: ";
 	cin >> price;
 	book = new Books(price);
 
-	cout << "Enter software details";
+	cout << "Enter software price: ";
 	cin >> price;
 	software = new Software(price);
 
@@ -43,13 +36,13 @@ int main()
 	pointers[0] = book;
 	pointers[1] = software;
 
-	for (int i = 2; i < 8; i++)
+	for (int i = 2; i < arraySize; i++)
 	{
-		cout << "Enter price of item " << i;
+		cout << "Enter price of item: " << (i + 1);
 		cin >> price;
 
 		char type;
-		cout << "Book or Software? Type s or b";
+		cout << "Book or Software? Type s or b: ";
 		cin >> type;
 
 		if (type == 's')
@@ -63,9 +56,9 @@ int main()
 
 	}
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < arraySize; i++)
 	{
-		cout << pointers[i]->getGrossPrice();
+		cout << "\n\n" << pointers[i]->getGrossPrice();
 	}
 
 	cout << "\n\n";
