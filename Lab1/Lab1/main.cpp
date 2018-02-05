@@ -43,7 +43,30 @@ int main()
 	pointers[0] = book;
 	pointers[1] = software;
 
+	for (int i = 2; i < 8; i++)
+	{
+		cout << "Enter price of item " << i;
+		cin >> price;
 
+		char type;
+		cout << "Book or Software? Type s or b";
+		cin >> type;
+
+		if (type == 's')
+		{
+			pointers[i] = new Software(price);
+		}
+		if (type == 'b')
+		{
+			pointers[i] = new Books(price);
+		}
+
+	}
+
+	for (int i = 0; i < 8; i++)
+	{
+		cout << pointers[i]->getGrossPrice();
+	}
 
 	cout << "\n\n";
 	system("pause");
