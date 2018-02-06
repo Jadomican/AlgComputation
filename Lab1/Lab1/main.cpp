@@ -8,6 +8,11 @@
 #include "Books.h"
 using namespace std;
 
+bool sortingMechanism(Product *i, Product *j)
+{
+	return  i->getGrossPrice() < j->getGrossPrice();
+}
+
 int main()
 {
 	int const arraySize = 8;
@@ -38,11 +43,11 @@ int main()
 
 	for (int i = 2; i < arraySize; i++)
 	{
-		cout << "Enter price of item: " << (i + 1);
+		cout << "Enter price of item: " << (i + 1) << ": ";
 		cin >> price;
 
 		char type;
-		cout << "Book or Software? Type s or b: ";
+		cout << "Book or Software? Type s or b: " << ": ";
 		cin >> type;
 
 		if (type == 's')
@@ -58,20 +63,22 @@ int main()
 
 	for (int i = 0; i < arraySize; i++)
 	{
-		cout << "\n\n" << pointers[i]->getGrossPrice();
+		cout << "\n" << pointers[i]->getGrossPrice() << "\n";
 	}
 
+	/***************************************************************************************
+	*    Usage: modified
+	*    Title: Beginners guide to the std::sort() function
+	*    Date: 05/02/2018
+	*    Availability: http://www.cplusplus.com/articles/NhA0RXSz/
+	***************************************************************************************/
 
-	//Now we call the sort function
-	//http://www.cplusplus.com/articles/NhA0RXSz/
-	sort(pointers, pointers + arraySize);
+	std::sort(begin(pointers), end(pointers), sortingMechanism);
 
-	cout << "Sorted Array looks like this." << endl;
-	for (size_t i = 0; i != arraySize; ++i)
-		cout << pointers[i]->getGrossPrice() << " ";
-
-
-
+	cout << "Sorted prices: \n";
+	for (int i = 0; i < arraySize; i++) {
+		cout << pointers[i]->getGrossPrice() << "\n";
+	}
 
 	cout << "\n\n";
 	system("pause");
