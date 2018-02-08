@@ -3,8 +3,6 @@
 #include <iostream>
 #include <algorithm>
 
-//using namespace std;
-
 template <class T1, class T2> void swap(T1* lhs, T2* rhs)
 {
 	//T1 temp = lhs;
@@ -41,8 +39,55 @@ T1 init(T1 num1, T1 num2, T2& start)
 template <typename T>
 T* quicksort(T* array, int start, int end)
 {
-	if start < end;
+	int i = start, j = end;
 
+	int tmp;
+
+	int pivot = array[(start + end) / 2];
+
+	/* partition */
+
+	while (i <= j) {
+
+		while (array[i] < pivot)
+
+			i++;
+
+		while (array[j] > pivot)
+
+			j--;
+
+		if (i <= j) {
+
+			tmp = array[i];
+
+			array[i] = array[j];
+
+			array[j] = tmp;
+
+			i++;
+
+			j--;
+
+		}
+
+	};
+
+	/* recursion */
+
+	if (start < j)
+	{
+		quicksort(array, start, j);
+	}
+		
+
+	if (i < end)
+	{
+		quicksort(array, i, end);
+	}
+
+	return array;
+		
 }
 
 
@@ -65,10 +110,26 @@ int main()
 	int num1 = 2;
 	int num2 = 3;
 	double start = 2.2;
+	std::cout << "\n\n" << init(num1, num2, start) << "\n";
+	std::cout << start << "\n\n";
 
-	std::cout << "\n\n" << init(num1, num2, start) << std::endl;
-	std::cout << start;
 
+	//Question 4
+	int arrayInt[] = { 3, 5, 6, 55, 22, 2011, 404 };
+
+	for (int i = 0; i < 7; i++)
+	{
+		std::cout << arrayInt[i] << std::endl;
+	}
+
+	quicksort(arrayInt, 0, 6);
+	std::cout << "\nQuick sorted:\n";
+
+
+	for (int i = 0; i < 7; i++)
+	{
+		std::cout << arrayInt[i] << std::endl;
+	}
 
 	std::cout << "\n\n";
 	system("pause");
