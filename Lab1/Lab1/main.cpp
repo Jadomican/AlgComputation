@@ -1,4 +1,4 @@
-//X00119321 Jason Domican Lab 7B
+//X00119321 Jason Domican Lab 1
 
 #include <iostream>
 #include <algorithm>
