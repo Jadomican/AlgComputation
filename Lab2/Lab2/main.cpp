@@ -36,6 +36,13 @@ T1 init(T1 num1, T1 num2, T2& start)
 }
 
 
+/***************************************************************************************
+*    Usage: modified
+*    Title: QUICKSORT (Java, C++) |  Algorithms and Data Structures
+*    Date: 09/02/2018
+*    Availability: http://www.algolist.net/Algorithms/Sorting/Quicksort
+***************************************************************************************/
+
 template <typename T>
 T* quicksort(T* array, int start, int end)
 {

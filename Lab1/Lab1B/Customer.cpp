@@ -10,5 +10,5 @@ Customer::Customer(string nameIn):Person(nameIn)
 void Customer::printname()
 {
 	Person::printname();
-	cout << " and I want to make a complaint\n";
+	cout << " and I want to make a complaint";
 }
