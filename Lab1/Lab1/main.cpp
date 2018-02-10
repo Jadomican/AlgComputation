@@ -32,10 +32,10 @@ int main()
 	cin >> price;
 	software = new Software(price);
 
-	cout << "\n\n";
+	cout << "\n";
 	cout << book->getGrossPrice();
 
-	cout << "\n\n";
+	cout << "\n";
 	cout << software->getGrossPrice();
 
 	pointers[0] = book;
@@ -43,7 +43,7 @@ int main()
 
 	for (int i = 2; i < arraySize; i++)
 	{
-		cout << "Enter price of item: " << (i + 1) << ": ";
+		cout << "\nEnter price of item: " << (i + 1) << ": ";
 		cin >> price;
 
 		char type;
@@ -63,7 +63,7 @@ int main()
 
 	for (int i = 0; i < arraySize; i++)
 	{
-		cout << "\n" << pointers[i]->getGrossPrice() << "\n";
+		cout << "\n" << pointers[i]->getGrossPrice();
 	}
 
 	/***************************************************************************************
@@ -75,7 +75,7 @@ int main()
 
 	std::sort(begin(pointers), end(pointers), sortingMechanism);
 
-	cout << "Sorted prices: \n";
+	cout << "\n\nSorted prices: \n";
 	for (int i = 0; i < arraySize; i++) {
 		cout << pointers[i]->getGrossPrice() << "\n";
 	}

@@ -1,3 +1,5 @@
+//X00119321 Jason Domican Lab 1B ALC
+
 #include "Employee.h"
 
 Employee::Employee(string nameIn, double salaryIn):Person(nameIn), salary(salaryIn)

@@ -1,3 +1,5 @@
+//X00119321 Jason Domican Lab 1B ALC
+
 #include <string>
 #include <iostream>
 #include "Person.h"
