@@ -3,17 +3,12 @@
 #include <iostream>
 #include <algorithm>
 
-template <class T1, class T2> void swap(T1* lhs, T2* rhs)
+template <class T1> void swap(T1* lhs, T1* rhs)
 {
-	//T1 temp = lhs;
-	//lhs = rhs;
-	//rhs = temp;
-
-	int temp;
+	T1 temp;
 	temp =	*rhs;
 	*rhs = *lhs;
 	*lhs = temp;
-
 }
 
 
@@ -32,7 +27,7 @@ template <class T1, class T2>
 T1 init(T1 num1, T1 num2, T2& start)
 {
 	start = T2(1);
-	return num1 + num2;
+	return T1(num1 + num2);
 }
 
 
@@ -86,7 +81,6 @@ T* quicksort(T* array, int start, int end)
 	{
 		quicksort(array, start, j);
 	}
-		
 
 	if (i < end)
 	{
@@ -94,7 +88,6 @@ T* quicksort(T* array, int start, int end)
 	}
 
 	return array;
-		
 }
 
 
@@ -102,9 +95,18 @@ int main()
 {
 	//Question 1
 	int a = 5;
-	float b = 10;
+	int b = 10;
+
+	float c = 20.4;
+	float d = 80.3;
+
+	// Swap using ints
 	swap(&a, &b);
 	std::cout << "\na: " << a << "\nb: " << b;
+
+	// Swap using floats
+	swap(&c, &d);
+	std::cout << "\n\nc: " << c << "\nd: " << d;
 
 
 	//Question 2
@@ -124,6 +126,7 @@ int main()
 	//Question 4
 	int arrayInt[] = { 3, 5, 6, 55, 22, 2011, 404 };
 
+	std::cout << "\nUnsorted:\n";
 	for (int i = 0; i < 7; i++)
 	{
 		std::cout << arrayInt[i] << std::endl;
@@ -131,7 +134,6 @@ int main()
 
 	quicksort(arrayInt, 0, 6);
 	std::cout << "\nQuick sorted:\n";
-
 
 	for (int i = 0; i < 7; i++)
 	{
