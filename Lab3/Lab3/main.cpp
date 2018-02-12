@@ -12,7 +12,7 @@ void mergeSort(int arrayToSort[], int startIndex, int lengthToSort)
 
 		mergeSort(arrayToSort, 1, m);
 		mergeSort(arrayToSort, m + 1, lengthToSort);
-		merge(arrayToSort, 1, lengthToSort);
+		//merge(arrayToSort, 1, lengthToSort);
 	}
 }
 
