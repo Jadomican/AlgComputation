@@ -72,7 +72,7 @@ void mergeSort(int arrayToSort[], int startIndex, int endIndex)
 int quickSortDivide(int *theArray, int size) 
 {
 
-	
+	//return the final position of the pivot in the array	
 }
 
 
