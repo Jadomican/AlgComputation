@@ -1,9 +1,11 @@
 #include <iostream>
+#include "Person.h"
 using namespace std;
 
 int const arraySize = 8;
 
-void printArray(int array[])
+template <class T>
+void printArray(T array[])
 {
 	int i;
 	for (i = 0; i < arraySize; i++)
@@ -13,10 +15,10 @@ void printArray(int array[])
 	cout << "\n";
 }
 
-
-void swap(int* a, int* b)
+template <class T>
+void swap(T* a, T* b)
 {
-	int temp = *a;
+	T temp = *a;
 	*a = *b;
 	*b = temp;
 }
@@ -24,9 +26,11 @@ void swap(int* a, int* b)
 // You return the final position of the pivot in the array.
 // Pass in the index positions of the section of the array
 // to be sorted
-int quickSortDivide(int array[], int first, int last)
+
+template <class T>
+int quickSortDivide(T array[], int first, int last)
 {
-	int pivot = array[last];
+	T pivot = array[last];
 	int i = (first - 1);
 
 	for (int j = first; j <= last - 1; j++)
@@ -47,7 +51,9 @@ int quickSortDivide(int array[], int first, int last)
 }
 
 // Recursive quicksort method 
-void quickSort(int array[], int first, int last)
+
+template <class T>
+void quickSort(T array[], int first, int last)
 {
 	if (first < last)
 	{
@@ -62,7 +68,9 @@ void quickSort(int array[], int first, int last)
 int main()
 {
 
-	int numbers[]{ 4, 6, 2, 8, 2, 10, 6, 5 };
+	//int numbers[]{ 4, 6, 2, 8, 2, 10, 6, 5 };
+	double numbers[]{ 4.5, 6.2, 2.1, 8.3, 2.8, 10.2, 6.2, 5.2 };
+
 	cout << endl;
 	printArray(numbers);
 
@@ -72,6 +80,7 @@ int main()
 
 	cout << "\n\n";
 	printArray(numbers);
+
 
 	system("pause");
 	return 0;
