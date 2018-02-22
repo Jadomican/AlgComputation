@@ -13,6 +13,7 @@ class Person
 public:
 	Person(string);					// initialise the name 
 	virtual void printname() = 0;	// Make class abstract using pure virtual function
+	string getname();
 
 /*
 * Without the 'virtual' keyword here the output for all 3 object types (Person, Customer and Employee)

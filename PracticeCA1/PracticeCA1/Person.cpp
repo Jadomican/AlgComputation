@@ -15,6 +15,12 @@ void Person::printname()
 	cout << "\nMy name is " << name;
 }
 
+string Person::getname()
+{
+	return name;
+}
+
+
 bool Person::operator<(const Person& p)
 {
 	if (p.name.compare(name) < 0) {
@@ -28,7 +34,7 @@ bool Person::operator<(const Person& p)
 
 bool Person::operator<=(const Person& p)
 {
-	if (p.name.compare(name) <= 0) {
+	if (p.name.compare(name) < 0) {
 		return false;
 	}
 	else

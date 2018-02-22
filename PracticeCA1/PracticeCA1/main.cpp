@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <vector>
 #include "Person.h"
 using namespace std;
 
@@ -10,7 +12,7 @@ void printArray(T array[])
 	int i;
 	for (i = 0; i < arraySize; i++)
 	{
-		cout << array[i] << " ";
+		cout << array[i]->getname() << " ";
 	}
 	cout << "\n";
 }
@@ -30,12 +32,12 @@ void swap(T* a, T* b)
 template <class T>
 int quickSortDivide(T array[], int first, int last)
 {
-	T pivot = array[last];
+	string pivot = (array[last])->getname();
 	int i = (first - 1);
 
 	for (int j = first; j <= last - 1; j++)
 	{
-		if (array[j] <= pivot)
+		if (array[j]->getname() <= pivot)
 		{
 			i++;
 			printArray(array);
@@ -53,7 +55,7 @@ int quickSortDivide(T array[], int first, int last)
 // Recursive quicksort method 
 
 template <class T>
-void quickSort(T array[], int first, int last)
+void quickSort(T array, int first, int last)
 {
 	if (first < last)
 	{
@@ -69,18 +71,35 @@ int main()
 {
 
 	//int numbers[]{ 4, 6, 2, 8, 2, 10, 6, 5 };
-	double numbers[]{ 4.5, 6.2, 2.1, 8.3, 2.8, 10.2, 6.2, 5.2 };
+	//double numbers[]{ 4.5, 6.2, 2.1, 8.3, 2.8, 10.2, 6.2, 5.2 };
 
 	cout << endl;
-	printArray(numbers);
+	//printArray(numbers);
 
 	cout << "\n\n";
 
- 	quickSort(numbers, 0, arraySize - 1);
+ 	//quickSort(numbers, 0, arraySize - 1);
 
 	cout << "\n\n";
-	printArray(numbers);
+	//printArray(numbers);
 
+	Person* arrayPeople[arraySize] = {
+
+		new Customer("Steve"),
+		new Employee("Aaron", 20000),
+		new Customer("Topham"),
+		new Employee("Michael", 30000),
+		new Customer("Karl"),
+		new Customer("Jason"),
+		new Customer("Robert"),
+		new Customer("Ricky")
+	};
+	
+	printArray(arrayPeople);
+
+	quickSort(arrayPeople, 0, arraySize - 1);
+
+	printArray(arrayPeople);
 
 	system("pause");
 	return 0;
