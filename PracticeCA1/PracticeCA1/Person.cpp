@@ -23,23 +23,23 @@ string Person::getname()
 
 bool Person::operator<(const Person& p)
 {
-	if (p.name.compare(name) < 0) {
-		return false;
+	if (name < p.name) {
+		return true;
 	}
 	else
 	{
-		return true;
+		return false;
 	}
 }
 
 bool Person::operator<=(const Person& p)
 {
-	if (p.name.compare(name) < 0) {
-		return false;
+	if (name <= p.name) {
+		return true;
 	}
 	else
 	{
-		return true;
+		return false;
 	}
 }
 
