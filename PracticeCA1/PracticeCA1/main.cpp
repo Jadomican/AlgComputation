@@ -9,10 +9,10 @@ int const arraySize = 8;
 template <class T>
 void printArray(T array[])
 {
-	int i;
-	for (i = 0; i < arraySize; i++)
+	for (int i = 0; i < arraySize; i++)
 	{
 		array[i]->printname();
+		//cout << *(array[i]);
 	}
 	cout << "\n";
 }
@@ -25,6 +25,7 @@ void swap(T* a, T* b)
 	*b = temp;
 }
 
+
 // You return the final position of the pivot in the array.
 // Pass in the index positions of the section of the array
 // to be sorted
@@ -32,24 +33,24 @@ void swap(T* a, T* b)
 template <class T>
 int quickSortDivide(T array[], int first, int last)
 {
-	//string pivot = (array[last])->getname();
+	T pivot = array[last];
 
-	T pivot = (array[last]);
+	int i = first - 1;
 
-	int i = (first - 1);
-
-	for (int j = first; j <= last - 1; j++)
+	for (int j = first; j < last; j++)
 	{
-
-		if (*(array[j]) <= *(pivot))
+		if (*(array[j]) <= (*pivot))
 		{
 			i++;
 			swap(&array[i], &array[j]);
 		}
 	}
+
 	swap(&array[i + 1], &array[last]);	//pivot should be at i + 1
-	return (i + 1);
+	return i + 1;
+
 }
+
 
 // Recursive quicksort method 
 
@@ -62,9 +63,9 @@ void quickSort(T array[], int first, int last)
 
 		quickSort(array, first, pivotIndex - 1);
 		quickSort(array, pivotIndex + 1, last);
+
 	}
 }
-
 
 int main()
 {

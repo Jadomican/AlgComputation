@@ -21,21 +21,22 @@ public:
 * for the alternative definitions given for printname() in Customer and Employee
 */
 
-	bool operator<(const Person& p);
-	bool operator<=(const Person& p);
+	// Overloading as a member function: first parameter is the calling object implicitly
+	bool operator<(const Person&);
+	bool operator<=(const Person&);
+
+	friend bool operator<=(const Person&, const Person&);
+	friend ostream& operator<<(ostream&, const Person&);
 
 protected:
 	string name;
 };
-
 
 class Customer : public Person
 {
 public:
 	Customer(string);
 	void printname();
-
-
 };
 
 class Employee : public Person
@@ -45,8 +46,9 @@ public:
 	void printname();
 private:
 	double salary;
+
 };
 
 
-
 #endif
+

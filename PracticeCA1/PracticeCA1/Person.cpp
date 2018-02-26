@@ -43,6 +43,17 @@ bool Person::operator<=(const Person& p)
 	}
 }
 
+ostream & operator<<(ostream & stream, const Person & person)
+{
+	stream << "\nMy name is " << person.name;
+	return stream;
+}
+
+bool operator<=(const Person& p1, const Person& p2)
+{
+	return false;
+}
+
 //Employee
 Employee::Employee(string nameIn, double salaryIn) :Person(nameIn), salary(salaryIn)
 {
