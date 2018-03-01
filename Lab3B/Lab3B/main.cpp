@@ -1,5 +1,3 @@
-//https://www.cprogramming.com/tutorial/lesson18.html
-
 #include <iostream>
 #include "TreeNode.h"
 #include "BinaryTree.h"
