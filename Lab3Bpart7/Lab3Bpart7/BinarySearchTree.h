@@ -9,10 +9,10 @@
 using namespace std;
 
 /***************************************************************************************
-*    Usage: modified
-*    Title: Absolute C++ (5th Edition) - Linked Data Structures (P.804-806)
-*	 Author: Savitch, W
-*    Date: 27/02/2018
+*	Usage: modified
+*	Title: Absolute C++ (5th Edition) - Linked Data Structures (P.804-806)
+*	Author: Savitch, W
+*	Date: 27/02/2018
 ***************************************************************************************/
 
 template <class T>
