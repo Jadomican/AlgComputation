@@ -7,9 +7,10 @@ using namespace std;
 
 class TreeNode
 {
-	friend class BinaryTree;
 public:
-	TreeNode(int);
+	TreeNode(int data, TreeNode* left, TreeNode* right)
+		:key_value(data), leftPointer(left), rightPointer(right){}
+	friend class BinaryTree;
 
 private:
 	TreeNode* leftPointer;

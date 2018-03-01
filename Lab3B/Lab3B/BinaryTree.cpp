@@ -1,57 +1,59 @@
 #include "BinaryTree.h"
 
-BinaryTree::BinaryTree()
+void BinaryTree::add(int key, TreeNode*& subTreeRoot)
 {
-	root = NULL;
+	if (subTreeRoot == NULL)
+	{
+		subTreeRoot = new TreeNode(key, NULL, NULL);
+	}
+	else if (key < subTreeRoot->key_value)
+	{
+		add(key, subTreeRoot->leftPointer);
+	}
+	else
+	{
+		add(key, subTreeRoot->rightPointer);
+	}
 }
 
 void BinaryTree::add(int key)
 {
-	if (root != NULL)
+	add(key, root);
+}
+
+
+/***************************************************************************************
+*    Usage: modified
+*    Title: Binary Tree Height Function
+*    Date: 27/02/2018
+*	 Availability: https://stackoverflow.com/questions/13041948/binary-tree-height-function
+***************************************************************************************/
+
+
+int BinaryTree::height() const
+{
+	return height(root);
+}
+
+int BinaryTree::height(TreeNode * node) const
+{
+	if (node == NULL)
 	{
-		add(key, root);
+		return -1;
+	}
+
+	int left = height(node->leftPointer);
+	int right = height(node->rightPointer);
+
+	if (left > right)
+	{
+		return 1 + left;
 	}
 	else
 	{
-		// If root is null, set it
-		root = new TreeNode(key);
-		root->leftPointer = NULL;
-		root->rightPointer = NULL;
+		return 1 + right;
 	}
-}
 
-int BinaryTree::height(BinaryTree * height)
-{
-	return 0;
 }
 
 
-void BinaryTree::add(int key, TreeNode* leaf)
-{
-	if (key < leaf->key_value)
-	{
-		if (leaf->leftPointer != NULL)
-		{
-			add(key, leaf->leftPointer);
-		}
-		else
-		{
-			leaf->leftPointer = new TreeNode(key);
-			leaf->leftPointer->leftPointer = NULL; //Sets the left child of the child node to null
-			leaf->leftPointer->rightPointer = NULL; //Sets the right child of the child node to null
-		}
-	}
-	else if (key >= leaf->key_value)
-	{
-		if (leaf->rightPointer != NULL)
-		{
-			add(key, leaf->rightPointer);
-		}
-		else
-		{
-			leaf->rightPointer = new TreeNode(key);
-			leaf->rightPointer->leftPointer = NULL; //Sets the left child of the child node to null
-			leaf->rightPointer->rightPointer = NULL; //Sets the right child of the child node to null
-		}
-	}
-}

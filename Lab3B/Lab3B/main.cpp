@@ -1,19 +1,26 @@
 //https://www.cprogramming.com/tutorial/lesson18.html
 
 #include <iostream>
-
 #include "TreeNode.h"
 #include "BinaryTree.h"
+
+using namespace std;
 
 int main()
 {
 	
-	BinaryTree* tree = new BinaryTree();
+	BinaryTree tree;
 
+	tree.add(3);
+	tree.add(14);
+	tree.add(7);
+	tree.add(6);
+	tree.add(56);
+	tree.add(45);
 
+	cout << "Height of tree: " << tree.height() << endl;
 
-	TreeNode* node = new TreeNode(4);
-
+	system("pause");
 	return 0;
 
 }
