@@ -23,11 +23,18 @@ public:
 	void add(int key);
 	int height() const;
 	bool hasPathSum(int sum);
+	void printPaths();
+
+	//Utility function to print the paths to the screen
+	void printPathsArray(int ints[], int length);
+
 private:
 	void add(int key, TreeNode*& leaf);
 	int height(TreeNode* height) const;
 	bool hasPathSum(TreeNode* node, int sum);
 	TreeNode* root;
+	void printPaths(TreeNode* node, int path[], int pathLength);
+
 };
 
 #endif

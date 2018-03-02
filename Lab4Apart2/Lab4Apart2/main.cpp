@@ -15,15 +15,15 @@ int main()
 	tree.add(14);
 	tree.add(7);
 	tree.add(6);
-	tree.add(56);
-	tree.add(45);
+	tree.add(24);
+	tree.add(30);
 
 	cout << "Height of tree: " << tree.height() << "\n\n";
 
-	//Expect to find paths of 3 and 24
-	int pathsToTest[]{ 3, 24, 5 };
+	//Expect to find paths of 30 and 71
+	int pathsToTest[]{ 30, 71, 56, 99 };
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		if (tree.hasPathSum(pathsToTest[i]))
 		{
@@ -35,6 +35,9 @@ int main()
 		}
 
 	}
+
+	cout << "\nPrinting paths\n";
+	tree.printPaths();
 
 	system("pause");
 	return 0;
