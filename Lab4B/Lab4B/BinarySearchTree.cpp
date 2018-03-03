@@ -1,4 +1,4 @@
-//X00119321 Jason Domican - ALC LabB
+//X00119321 Jason Domican - ALC Lab4B
 
 #include "BinarySearchTree.h"
 #include <iostream>
