@@ -17,29 +17,29 @@ using namespace std;
 ***************************************************************************************/
 
 
-void getFrequency(string text, map<char, int>& frequencies)		//Function to determine frequencies for each character and populate map
+void getFrequency(ifstream& file, map<char, int>& frequencies)		//Function to determine frequencies for each character and populate map
 {
 	/***************************************************************************************
 	*	Usage: modified
 	*	Title: Filling map with 2 keys from a string. Character and frequency c++
 	*	Date: 10/03/2018
 	*	Availability: https://stackoverflow.com/questions/5272376/filling-map-with-2-keys-from-a-string-character-and-frequency-c
+	*
+	*	Usage: modified
+	*	Title: fstream Reading Carriage Return
+	*	Date: 10/03/2018
+	*	Availability: http://www.cplusplus.com/forum/beginner/1893/
 	***************************************************************************************/
 
-	for (string::iterator i = text.begin(); i != text.end(); i++)
+	char ch;
+	while ((ch = file.get()) != EOF)	// While the next character is not an End Of File marker
 	{
-		frequencies[*i]++;		// Add each character (key) to the map, increasing frequency (value) each time
+		frequencies[ch]++;				// Add each character (key) to the map, increasing frequency (value) each time
 	}
 }
 
-
 int main()
 {
-	map<char, int> huffman_map;		// Map to hold each unique character and how often it appears
-	string fileline;				// Each line of the text file
-	ifstream file;
-	file.open("text.txt");			// Open the text file for reading, current directory
-	
 	/***************************************************************************************
 	*	Usage: modified
 	*	Title: ADS1 CA1 - C++ Plagiarism Detector
@@ -48,15 +48,24 @@ int main()
 	*	Availability: https://github.com/Jadomican/ads1_ca1/blob/master/main.cpp
 	***************************************************************************************/
 
-	while (getline(file, fileline))
-	{
-		getFrequency(fileline, huffman_map);	// Get each character frequency for every line in the file
-	}
-	file.close();								// Close the text file after reading
+	map<char, int> huffman_map;			// Map to hold each unique character and how often it appears
+	ifstream file;
+	file.open("text.txt");				// Open the text file for reading, current directory
+	getFrequency(file, huffman_map);
+	file.close();						// Close file after reading
 
+
+	//Print the contents of the map
 	for (auto elem : huffman_map)
 	{
-		cout << elem.first << ", " << elem.second << "\n";
+		if (elem.first == '\n')
+		{
+			cout << "New line, " << elem.second << "\n";
+		}
+		else
+		{
+			cout << elem.first << ", " << elem.second << "\n";
+		}
 	}
 
 	system("pause");
