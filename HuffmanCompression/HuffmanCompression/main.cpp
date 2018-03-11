@@ -11,6 +11,8 @@
 #include <queue>
 using namespace std;
 
+ifstream file;		// Global variable to represent the file to be scanned
+
 /***************************************************************************************
 *	Usage: based on
 *	Title: Absolute C++ (5th Edition) - Chapter 19: Standard Template Library
@@ -34,7 +36,7 @@ void printMap(map<T1, T2> map)
 	}
 }
 
-void getFrequency(ifstream& file, map<char, int>& frequencies)		//Function to determine frequencies for each character and populate map
+void getFrequency(map<char, int>& frequencies)		//Function to determine frequencies for each character and populate map
 {
 	/***************************************************************************************
 	*	Usage: modified
@@ -47,12 +49,13 @@ void getFrequency(ifstream& file, map<char, int>& frequencies)		//Function to de
 	*	Date: 10/03/2018
 	*	Availability: http://www.cplusplus.com/forum/beginner/1893/
 	***************************************************************************************/
-
+	file.open("text.txt");				// Open the text file for reading, current directory
 	char ch;
 	while ((ch = file.get()) != EOF)	// While the next character is not an End Of File marker
 	{
 		frequencies[ch]++;				// Add each character (key) to the map, increasing frequency (value) each time
 	}
+	file.close();						// Close file after reading
 }
 
 void encodeCharacters(HuffmanNode* root, string str, map<char, string>& encoded_map)
@@ -61,14 +64,62 @@ void encodeCharacters(HuffmanNode* root, string str, map<char, string>& encoded_
 	{
 		return;
 	}
-
-	if (root->data != '£')
+	
+	if (root->data != '£')				// Pre-order tree traversal
 	{
-		encoded_map[root->data] = str;
+		encoded_map[root->data] = str;	// Add the combination of 0s and 1s representing the character
 	}
-
 	encodeCharacters(root->left, str + "0", encoded_map);
 	encodeCharacters(root->right, str + "1", encoded_map);
+}
+
+void writeEncodedText(map<char, string>& encoded_map)
+{
+	file.open("text.txt");				// Re-open the text file, now with the encoded map available
+	ofstream encoded_file;
+	encoded_file.open("encoded.txt");
+	char ch;
+	while ((ch = file.get()) != EOF)	// Write the encoded text to the new file
+	{
+		encoded_file << encoded_map[ch];
+	}
+	file.close();
+	encoded_file.close();
+}
+
+/***************************************************************************************
+*	Usage: modified
+*	Title: Huffman Decoding
+*	Date: 10/03/2018
+*	Availability: https://www.geeksforgeeks.org/huffman-decoding/
+***************************************************************************************/
+
+void decodeText(HuffmanNode* root, string str)		// Decode the encoded file and write result to a new file
+{
+	HuffmanNode* current = root;
+	file.open("encoded.txt");
+	ofstream decoded_file;
+	decoded_file.open("decoded.txt");				// File to represent the decoded file
+	char ch;
+	while ((ch = file.get()) != EOF)
+	{
+		if (ch == '0')
+		{
+			current = current->left;
+		}
+		else
+		{
+			current = current->right;
+		}
+
+		if (!current->left && !current->right)
+		{
+			decoded_file << current->data;
+			current = root;
+		}
+	}
+	file.close();
+	decoded_file.close();
 }
 
 /***************************************************************************************
@@ -111,6 +162,10 @@ void buildHuffmanTree(map<char, int> frequencies, int size)
 	map<char, string> encoded_map;
 	encodeCharacters(min_heap.top(), str, encoded_map);
 	printMap(encoded_map);
+
+	writeEncodedText(encoded_map);
+	decodeText(min_heap.top(), str);
+
 }
 
 
@@ -125,18 +180,12 @@ int main()
 	***************************************************************************************/
 
 	map<char, int> frequency_map;			// Map to hold each unique character and how often it appears
-	ifstream file;
-	file.open("text.txt");				// Open the text file for reading, current directory
-	getFrequency(file, frequency_map);
-	file.close();						// Close file after reading
-	
-										
-	printMap(frequency_map);			//Print the contents of the map
+	getFrequency(frequency_map);
+											
+	printMap(frequency_map);				//Print the contents of the map
 
 	map<char, string> encoded_map;
-	buildHuffmanTree(frequency_map, frequency_map.size());
-
-
+	buildHuffmanTree(frequency_map, frequency_map.size());	//Build tree and kick-off encoding and decoding
 
 	system("pause");
 	return 0;
