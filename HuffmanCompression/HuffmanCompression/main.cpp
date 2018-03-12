@@ -97,7 +97,7 @@ void writeEncodedText(map<char, string>& encoded_map)
 void decodeText(HuffmanNode* root, string str)		// Decode the encoded file and write result to a new file
 {
 	HuffmanNode* current = root;
-	file.open("encoded.txt");
+	file.open("encoded.txt");						// Open previously opened file
 	ofstream decoded_file;
 	decoded_file.open("decoded.txt");				// File to represent the decoded file
 	char ch;
@@ -120,6 +120,48 @@ void decodeText(HuffmanNode* root, string str)		// Decode the encoded file and w
 	}
 	file.close();
 	decoded_file.close();
+}
+
+//https://stackoverflow.com/questions/22971794/converting-binary-to-ascii
+void compressFile()
+{
+	file.open("encoded.txt");		//Re-open the encoded file, this time for compression
+	ofstream compressed_file;
+	compressed_file.open("compressed.txt");
+	int inChar = 0;
+	int outChar = 0;
+	int count = 0;
+	while ((inChar = file.get()) != EOF)
+	{
+		int x = inChar - '0';
+		// Ignore characters which aren't 0 or 1
+		if (x == 0 || x == 1)
+		{
+			// Accumulate the bit into the output char.
+			outChar = (outChar << 1) + x;
+			++count;
+			if (count == 8)							// 8 bit chunks
+			{
+				compressed_file.put(outChar);		// Write the compressed representation of the string of 0's and 1's
+				outChar = 0;
+				count = 0;
+			}
+		}
+	}
+	file.close();
+	compressed_file.close();
+}
+
+void decompressFile()		//Decode the compressed file
+{
+	file.open("compressed.txt");
+	ofstream decompressed_file;
+	decompressed_file.open("decompressed.txt");
+
+
+
+	decompressed_file.close();
+	file.close();
 }
 
 /***************************************************************************************
@@ -158,14 +200,15 @@ void buildHuffmanTree(map<char, int> frequencies, int size)
 		min_heap.push(top);
 	}
 
-	string str = "";
+	string str = "";					// String to represent the 0's and 1's for each character
 	map<char, string> encoded_map;
 	encodeCharacters(min_heap.top(), str, encoded_map);
 	printMap(encoded_map);
 
 	writeEncodedText(encoded_map);
 	decodeText(min_heap.top(), str);
-
+	compressFile();
+	decompressFile();
 }
 
 
