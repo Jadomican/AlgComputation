@@ -16,12 +16,19 @@ class BinarySearchTree
 public:
 	BinarySearchTree() : root(NULL) {}
 	void insert(T data); // Add a value to the tree
+	void deleteNode(T data);
 	void inOrderShow() const;
+	TreeNode<T>* minValueNode();
+	bool inTree(T data) const;
 
 private:
 	TreeNode<T>* root;
 	void insert(T data, TreeNode<T>*& subTreeRoot);
+	TreeNode<T>* deleteNode(T data, TreeNode<T>*& subTreeRoot);
 	void inOrderShow(TreeNode<T>* subTreeRoot) const;
+	TreeNode<T>* minValueNode(TreeNode<T>* node);
+	bool inTree(T data, TreeNode<T>* subTreeRoot) const;
+
 };
 
 // Public entry point to add a value
@@ -58,14 +65,115 @@ void BinarySearchTree<T>::inOrderShow() const
 }
 
 template <class T>
-void BinarySearchTree<T>::inOrderShow(TreeNode<T> * subTreeRoot) const
+void BinarySearchTree<T>::inOrderShow(TreeNode<T>* subTreeRoot) const
 {
 	if (subTreeRoot != NULL)
 	{
+		// In-order traversal of the tree
 		inOrderShow(subTreeRoot->leftNode);
 		cout << subTreeRoot->data << " ";
 		inOrderShow(subTreeRoot->rightNode);
 	}
 }
+
+
+template<class T>
+void BinarySearchTree<T>::deleteNode(T data)
+{
+	deleteNode(data, root);
+}
+
+
+template<class T>
+TreeNode<T>* BinarySearchTree<T>::minValueNode()
+{
+	minValueNode(root);
+}
+
+template<class T>
+TreeNode<T>* BinarySearchTree<T>::minValueNode(TreeNode<T>* node)
+{
+	// Gets the left-most node
+	TreeNode<T>* current = node;
+	while (current->leftNode != NULL)
+	{
+		current = current->leftNode;
+	}
+	return current;
+}
+
+template<class T>
+TreeNode<T>* BinarySearchTree<T>::deleteNode(T data, TreeNode<T>*&subTreeRoot)
+{
+	if (subTreeRoot == NULL)
+	{
+		return subTreeRoot;
+	}
+
+	if (data < subTreeRoot->data)
+	{
+		subTreeRoot->leftNode = deleteNode(data, subTreeRoot->leftNode);
+	}
+	else if (data > subTreeRoot->data)
+	{
+		subTreeRoot->rightNode = deleteNode(data, subTreeRoot->rightNode);
+	}
+	else
+	{
+		if (subTreeRoot->leftNode == NULL)
+		{
+			TreeNode<T>* temp = subTreeRoot->rightNode;
+			free (subTreeRoot);
+			//delete(subTreeRoot);
+			//subTreeRoot = NULL;
+			return temp;
+		}
+		else if (subTreeRoot->rightNode == NULL)
+		{
+			TreeNode<T>* temp = subTreeRoot->leftNode;
+			free(subTreeRoot);
+			//delete(subTreeRoot);
+			//subTreeRoot = NULL;
+			return temp;
+		}
+
+		TreeNode<T>* temp = minValueNode(subTreeRoot->rightNode);
+
+		subTreeRoot->data = temp->data;
+
+		subTreeRoot->rightNode = deleteNode(temp->data, subTreeRoot->rightNode);
+	}
+	return subTreeRoot;
+}
+
+template <class T>
+bool BinarySearchTree<T>::inTree(T data) const
+{
+	return inTree(data, root);
+}
+
+// Returns true if the value is in the tree
+template <class T>
+bool BinarySearchTree<T>::inTree(T data, TreeNode<T>* subTreeRoot) const
+{
+	if (subTreeRoot == NULL)
+	{
+		return false;
+	}
+	else if (subTreeRoot->data == data)
+	{
+		return true;
+	}
+	else if (data < subTreeRoot->data)
+	{
+		return inTree(data, subTreeRoot->leftNode);
+	}
+	else
+	{
+		return inTree(data, subTreeRoot->rightNode);
+	}
+}
+
+
 
 #endif

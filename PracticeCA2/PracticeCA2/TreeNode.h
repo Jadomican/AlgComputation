@@ -6,24 +6,26 @@
 #define TreeNode_h
 
 #include <cstdlib>
-using namespace std;
 
+using namespace std;
 
 template <class T>
 class BinarySearchTree;
+
 
 template <class T>
 class TreeNode
 {
 public:
-	// Initialise via constructor
-	TreeNode(T data, TreeNode* leftNode, TreeNode* rightNode)
-		:data(data), leftNode(leftNode), rightNode(rightNode) {}
+	TreeNode(T data, TreeNode<T>* left, TreeNode<T>* right)
+		:data(data), leftNode(left), rightNode(right) {}
 	friend class BinarySearchTree<T>;
+
 private:
-	TreeNode* leftNode;
-	TreeNode* rightNode;
+	TreeNode<T>* leftNode;
+	TreeNode<T>* rightNode;
 	T data;
+
 };
 
 #endif
