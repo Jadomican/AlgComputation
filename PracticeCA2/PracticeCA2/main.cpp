@@ -35,22 +35,38 @@ int main()
 	int testInTree = 77;
 	if (treeInts.inTree(testInTree))
 	{
-		cout << testInTree << " is in the tree\n";
+		cout << testInTree << " is in the tree\n\n";
 	}
 	else
 	{
-		cout << testInTree << " is NOT in the tree\n";
+		cout << testInTree << " is NOT in the tree\n\n";
 	}
+
+	treeInts.postOrderShow();
+	cout << endl;
+	treeInts.preOrderShow();
+
+	cout << endl;
+	cout << "Height: " << treeInts.height() << "\n";
+	cout << "Size: " << treeInts.size () << "\n\n";
+
+	cout << "Min value " << treeInts.minValue() << "\n";
+	cout << "Max value " << treeInts.maxValue() << "\n";
+
+	int value = treeInts.isBST();
+
+	if (value == 1)
+	{
+		cout << "\nThis is a Binary Search Tree!\n";
+	}
+	else
+	{
+		cout << "\nThis is NOT a Binary Search Tree!\n";
+	}
+
+
+
 	system("pause");
 	return 0;
 }
-
-//BinarySearchTree<double> treeDoubles;
-//treeDoubles.insert(13.5);
-//treeDoubles.insert(3.7);
-//treeDoubles.insert(56.3);
-//treeDoubles.insert(34.7);
-//treeDoubles.insert(34.3);
-//treeDoubles.insert(99.9);
-//treeDoubles.insert(60);
-//treeDoubles.inOrderShow();
+ 

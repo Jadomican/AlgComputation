@@ -21,7 +21,6 @@ public:
 		:data(data), leftNode(left), rightNode(right) {}
 	friend class BinarySearchTree<T>;
 
-private:
 	TreeNode<T>* leftNode;
 	TreeNode<T>* rightNode;
 	T data;
