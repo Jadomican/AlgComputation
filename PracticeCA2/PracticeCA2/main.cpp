@@ -16,7 +16,6 @@ int main()
 	treeInts.insert(10);
 	treeInts.insert(53);
 
-
 	treeInts.inOrderShow();
 	cout << endl;
 
@@ -64,8 +63,31 @@ int main()
 		cout << "\nThis is NOT a Binary Search Tree!\n";
 	}
 
+	BinarySearchTree<int> wrongTree;
+	wrongTree.insertWrong(10);
 
+	int value2 = wrongTree.isBST();
 
+	if (value2 == 1)
+	{
+		cout << "\nThis is a Binary Search Tree!\n";
+	}
+	else
+	{
+		cout << "\nThis is NOT a Binary Search Tree!\n";
+	}
+
+	wrongTree.inOrderShow();
+
+	cout << "Rebalance..:\n\n";
+	cout << "Size:" << wrongTree.size() << "\n\n";
+
+	TreeNode<int>* temp = wrongTree.getRoot();
+	temp = wrongTree.buildTree();
+	BinarySearchTree<int> b2;
+	b2.setRoot(temp);
+
+	b2.inOrderShow();
 	system("pause");
 	return 0;
 }

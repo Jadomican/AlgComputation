@@ -1,5 +1,5 @@
 //X00119321 Jason Domican
-//ADS1 CA2
+//AlgComputation CA2
 //Templated BST - add, delete, rebalance
 
 #ifndef BinarySearchTree_h
@@ -17,6 +17,8 @@ class BinarySearchTree
 public:
 	BinarySearchTree() : root(NULL) {}
 	void insert(T data); // Add a value to the tree
+	void insertWrong(T data); // Add a value to the tree
+
 	void deleteNode(T data);
 	void inOrderShow() const;
 	void preOrderShow() const;
@@ -31,9 +33,13 @@ public:
 	T maxValue();
 	int isBST();
 	TreeNode<T>* buildTree();
+	void setRoot(TreeNode<T>*);
+	TreeNode<T>* getRoot();
+
 private:
 	TreeNode<T>* root;
 	void insert(T data, TreeNode<T>*& subTreeRoot);
+	void insertWrong(T data, TreeNode<T>*& subTreeRoot);
 	TreeNode<T>* deleteNode(T data, TreeNode<T>*& subTreeRoot);
 	void inOrderShow(TreeNode<T>* subTreeRoot) const;
 	void preOrderShow(TreeNode<T>* subTreeRoot) const;
@@ -49,7 +55,7 @@ private:
 	int isBST(TreeNode<T>* subTreeRoot);
 	int isBSTRecur(TreeNode<T>* subTreeRoot, T min, T max);
 	TreeNode<T>* buildTree(TreeNode<T>* subTreeRoot);
-	void storeBSTNodes(TreeNode<T> subTreeRoot, vector < TreeNode<T>*> &nodes);
+	void storeBSTNodes(TreeNode<T>* subTreeRoot, vector <TreeNode<T>*> &nodes);
 	TreeNode<T>* buildTreeUtil(vector<TreeNode<T>*> &nodes, T start, T end);
 };
 
@@ -76,6 +82,35 @@ void BinarySearchTree<T>::insert(T data, TreeNode<T>*& subTreeRoot)
 	{
 		insert(data, subTreeRoot->rightNode);
 	}
+}
+
+// Insert all values to the left child node, allowing the creation of an unbalanced BST
+template <class T>
+void BinarySearchTree<T>::insertWrong(T data)
+{
+	insertWrong(data, root);
+}
+
+template <class T>
+void BinarySearchTree<T>::insertWrong(T data, TreeNode<T>*& subTreeRoot)
+{
+	if (subTreeRoot == NULL)
+	{
+		subTreeRoot = new TreeNode<T>(data, NULL, NULL);
+		subTreeRoot->leftNode = new TreeNode<T>(56, NULL, NULL);
+		subTreeRoot->leftNode->leftNode = new TreeNode<T>(45, NULL, NULL);
+		subTreeRoot->leftNode->leftNode->leftNode = new TreeNode<T>(23, NULL, NULL);
+		subTreeRoot->leftNode->leftNode->leftNode->leftNode = new TreeNode<T>(99, NULL, NULL);
+		subTreeRoot->leftNode->leftNode->leftNode->leftNode->leftNode = new TreeNode<T>(8, NULL, NULL);
+	}
+	//else if (data < subTreeRoot->data)
+	//{
+	//	insertWrong(data, subTreeRoot->leftNode);
+	//}
+	//else
+	//{
+	//	insertWrong(data, subTreeRoot->leftNode);
+	//}
 }
 
 // Public entry point to show tree values in-order
@@ -180,7 +215,7 @@ TreeNode<T>* BinarySearchTree<T>::deleteNode(T data, TreeNode<T>*&subTreeRoot)
 		if (subTreeRoot->leftNode == NULL)
 		{
 			TreeNode<T>* temp = subTreeRoot->rightNode;
-			free (subTreeRoot);
+			free(subTreeRoot);
 			//delete(subTreeRoot);
 			//subTreeRoot = NULL;
 			return temp;
@@ -366,16 +401,7 @@ int BinarySearchTree<T>::isBST()
 template <class T>
 int BinarySearchTree<T>::isBST(TreeNode<T>* subTreeRoot)
 {
-	if (subTreeRoot == NULL)
-	{
-		return 0;
-	}
-	else
-	{
-		//Initial values for min and max are the highest and lowest Integers
-		//These values get smaller with each recursive call in isBSTRecur()
-		return isBSTRecur(subTreeRoot, INT_MIN, INT_MAX);
-	}
+	return isBSTRecur(subTreeRoot, INT_MIN, INT_MAX);
 }
 
 
@@ -393,11 +419,10 @@ int BinarySearchTree<T>::isBSTRecur(TreeNode<T>* subTreeRoot, T min, T max)
 		//Return false
 		return 0;
 	}
-	else
-	{
-		isBSTRecur(subTreeRoot->leftNode, min, subTreeRoot->data);
-		isBSTRecur(subTreeRoot->rightNode, subTreeRoot->data, max);
-	}
+
+	isBSTRecur(subTreeRoot->leftNode, min, subTreeRoot->data - 1) &&
+	isBSTRecur(subTreeRoot->rightNode, subTreeRoot->data + 1, max);
+
 }
 
 template <class T>
@@ -409,7 +434,7 @@ TreeNode<T>* BinarySearchTree<T>::buildTree()
 template <class T>
 TreeNode<T>* BinarySearchTree<T>::buildTree(TreeNode<T>* subTreeRoot)
 {
-	vector<TreeNode*> nodes;
+	vector<TreeNode<T>*> nodes;
 	storeBSTNodes(subTreeRoot, nodes);
 
 	int n = nodes.size();
@@ -417,7 +442,7 @@ TreeNode<T>* BinarySearchTree<T>::buildTree(TreeNode<T>* subTreeRoot)
 }
 
 template <class T>
-void BinarySearchTree<T>::storeBSTNodes(TreeNode<T> subTreeRoot, vector <TreeNode<T>*> &nodes)
+void BinarySearchTree<T>::storeBSTNodes(TreeNode<T>* subTreeRoot, vector <TreeNode<T>*> &nodes)
 {
 	if (subTreeRoot == NULL)
 	{
@@ -426,7 +451,7 @@ void BinarySearchTree<T>::storeBSTNodes(TreeNode<T> subTreeRoot, vector <TreeNod
 
 	storeBSTNodes(subTreeRoot->leftNode, nodes);
 	nodes.push_back(subTreeRoot);
-	storeBSTNodes(subTreeRoot->leftright, nodes);
+	storeBSTNodes(subTreeRoot->rightNode, nodes);
 }
 
 template <class T>
@@ -437,6 +462,7 @@ TreeNode<T>* BinarySearchTree<T>::buildTreeUtil(vector<TreeNode<T>*> &nodes, T s
 		return NULL;
 	}
 
+	// Make the middle element the root
 	T mid = (start + end) / 2;
 	TreeNode<T>* subTreeRoot = nodes[mid];
 
@@ -446,6 +472,16 @@ TreeNode<T>* BinarySearchTree<T>::buildTreeUtil(vector<TreeNode<T>*> &nodes, T s
 	return subTreeRoot;
 }
 
+template <class T>
+void BinarySearchTree<T>::setRoot(TreeNode<T>* subTreeRoot)
+{
+	root = subTreeRoot;
+}
 
+template <class T>
+TreeNode<T>* BinarySearchTree<T>::getRoot()
+{
+	return root;
+}
 
 #endif

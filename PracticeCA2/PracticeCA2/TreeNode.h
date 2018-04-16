@@ -1,5 +1,5 @@
 //X00119321 Jason Domican
-//ADS1 CA2
+//AlgComputation CA2
 //Templated BST - add, delete, rebalance
 
 #ifndef TreeNode_h
@@ -12,7 +12,6 @@ using namespace std;
 template <class T>
 class BinarySearchTree;
 
-
 template <class T>
 class TreeNode
 {
@@ -21,6 +20,7 @@ public:
 		:data(data), leftNode(left), rightNode(right) {}
 	friend class BinarySearchTree<T>;
 
+private:
 	TreeNode<T>* leftNode;
 	TreeNode<T>* rightNode;
 	T data;
