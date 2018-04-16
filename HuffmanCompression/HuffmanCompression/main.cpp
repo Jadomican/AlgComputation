@@ -20,7 +20,7 @@ ifstream file;		// Global variable to represent the file to be scanned
 *	Date: 29/10/2016
 ***************************************************************************************/
 
-template <class T1, class T2>
+template <class T1, class T2>		// Utility function to print out each key/value in a given map
 void printMap(map<T1, T2> map)
 {
 	for (auto elem : map)
@@ -58,7 +58,8 @@ void getFrequency(map<char, int>& frequencies)		//Function to determine frequenc
 	file.close();						// Close file after reading
 }
 
-void encodeCharacters(HuffmanNode* root, string str, map<char, string>& encoded_map)
+
+void encodeCharacters(HuffmanNode* root, string str, map<char, string>& encoded_map) // Pass a map by reference to be encoded based on the 
 {
 	if (!root)
 	{
@@ -172,31 +173,41 @@ void decompressFile()		//Decode the compressed file
 *	Availability: https://www.geeksforgeeks.org/greedy-algorithms-set-3-huffman-coding/
 ***************************************************************************************/
 
-void buildHuffmanTree(map<char, int> frequencies, int size)
+void buildHuffmanTree(map<char, int> frequencies)
 {
 	HuffmanNode *left, *right, *top;
 
-	// Create a binary heap with a min-heap ordering
+	// Create a binary heap with a min-heap ordering using a priority queue. Elements with high priority
+	// are served befroe elements with lower priorities
 	priority_queue<HuffmanNode*, vector<HuffmanNode*>, compare> min_heap;
 
-	// Add each character along with its frequency to the heap
+	// Add each character along with its frequency to the heap. The order in which the elements are stored is dictated by the 'compare'
+	// function specified in the declaration of the queue
 	for (auto elem : frequencies)
 	{
 		min_heap.push(new HuffmanNode(elem.first, elem.second));
 	}
 
-	while (min_heap.size() != 1)
+	// The heap size is initially the amount of unique characters in the frequencies map. Each time around this block of code
+	// the size decrements as elements are 'popped' off the top of the queue and added to the Huffman Tree. When the size of the
+	// heap is 2, the last 2 elements are placed into the left and right nodes and the while loop finishes
+	while (min_heap.size() > 1)
 	{
-		left = min_heap.top();
-		min_heap.pop();
-		right = min_heap.top();
-		min_heap.pop();
+		left = min_heap.top();		// Assign the left child node to the top node in the queue
+		min_heap.pop();				// Remove the top element from the queue
+		right = min_heap.top();		// Assign the right child node to the top node in the queue
+		min_heap.pop();				// Again remove the top element
 
 		// '£' is a special value not used in the text
+		// Create the top 'link' node between two trees with the value of the frequency of left the right nodes summed
 		top = new HuffmanNode('£', left->frequency + right->frequency);
+
+		// Set the new top node's children to be the left and right nodes
 		top->left = left;
 		top->right = right;
 
+		// Push the top node onto the tree gradually adding all the required nodes to the Huffman Tree. After the last 2 elements are pushed
+		// the final 'top' link is pushed to the tree. This is the top level root node.
 		min_heap.push(top);
 	}
 
@@ -223,12 +234,12 @@ int main()
 	***************************************************************************************/
 
 	map<char, int> frequency_map;			// Map to hold each unique character and how often it appears
-	getFrequency(frequency_map);
+	getFrequency(frequency_map);			// Populate the map with the frequencies of each character
 											
 	printMap(frequency_map);				//Print the contents of the map
 
 	map<char, string> encoded_map;
-	buildHuffmanTree(frequency_map, frequency_map.size());	//Build tree and kick-off encoding and decoding
+	buildHuffmanTree(frequency_map);	//Build tree using the character frequencies and kick-off encoding and decoding
 
 	system("pause");
 	return 0;
