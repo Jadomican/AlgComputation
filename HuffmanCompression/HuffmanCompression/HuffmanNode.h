@@ -13,11 +13,11 @@ struct HuffmanNode {
 		:data(data), frequency(frequency), left(nullptr), right(nullptr) {}
 };
 
-// Used to provide the Priority Queue with a custom ordering, in this case based
-// on the frequency of each character that appears in the given text file
+// Used to provide the Priority Queue with a custom ordering, in this case the nodes
+//with lowest frequency are given highest priority at the 'top' of the queue
 struct compare {
 
-	bool operator()(HuffmanNode* left, HuffmanNode* right)
+	bool operator()(HuffmanNode* left, HuffmanNode* right)		//Return true if the left node is more frequent than the right. 
 	{
 		return (left->frequency > right->frequency);
 	}
