@@ -9,6 +9,7 @@
 #include <string>
 #include "HuffmanNode.h"
 #include <queue>
+#include <bitset>
 using namespace std;
 
 /***************************************************************************************
@@ -34,7 +35,7 @@ void printMap(map<T1, T2> map)
 	}
 }
 
-void getFrequency(map<char, int>& frequencies)	//Function to determine frequencies for each character and populate map
+void get_frequency(map<char, int>& frequencies)	//Function to determine frequencies for each character and populate map
 {
 	/***************************************************************************************
 	*	Usage: modified
@@ -47,13 +48,13 @@ void getFrequency(map<char, int>& frequencies)	//Function to determine frequenci
 	*	Date: 10/03/2018
 	*	Availability: http://www.cplusplus.com/forum/beginner/1893/
 	***************************************************************************************/
-	ifstream file("text.txt");			// Input stream used to open files. Open the text file for reading, current directory
+	ifstream input_file("text.txt");			// Input stream used to open files. Open the text file for reading, current directory
 	char ch;
-	while ((ch = file.get()) != EOF)	// While the next character is not an End Of File marker
+	while ((ch = input_file.get()) != EOF)	// While the next character is not an End Of File marker
 	{
 		frequencies[ch]++;				// Add each character (key) to the map, increasing frequency (value) each time
 	}
-	file.close();						// Close file after reading
+	input_file.close();						// Close file after reading
 }
 
 // Pass a map by reference to be filled with the character encodings based on the previously made Huffman Tree
@@ -79,14 +80,14 @@ void encodeCharacters(HuffmanNode* root, string str, map<char, string>& encoded_
 // Based on the map of encodings write the 0s and 1s representation of each character to a file
 void writeEncodedText(map<char, string>& encoded_map)
 {
-	ifstream file("text.txt");			// Re-open the text file, now with the encoded map available
+	ifstream input_file("text.txt");			// Re-open the text file, now with the encoded map available
 	ofstream encoded_file("encoded.txt"); 
 	char ch;
-	while ((ch = file.get()) != EOF)	// Write the encoded text to the new file
+	while ((ch = input_file.get()) != EOF)	// Write the encoded text to the new file
 	{
 		encoded_file << encoded_map[ch];
 	}
-	file.close();						// Close both files after reading
+	input_file.close();						// Close both files after reading
 	encoded_file.close();
 }
 
@@ -97,14 +98,16 @@ void writeEncodedText(map<char, string>& encoded_map)
 *	Availability: https://www.geeksforgeeks.org/huffman-decoding/
 ***************************************************************************************/
 
-void decodeText(HuffmanNode* root, string str)		// Decode the encoded file and write result to a new file
+void decodeText(HuffmanNode* root)		// Decode the encoded file and write result to a new file
 {
 	HuffmanNode* current = root;
-	ifstream file("encoded.txt");
+	ifstream input_file("encoded.txt");
 	ofstream decoded_file("decoded.txt");			// File to represent the decoded string of 1's and 0's
 	char ch;
-	while ((ch = file.get()) != EOF)
+	while ((ch = input_file.get()) != EOF)				// Read in each character in the file
 	{
+		// Traverse through the Tree based on the 1's and 0's. The unique prefix code property of the HuffMan Tree means
+		// that there are no duplicate sequences of 1's and 0's that lead to a character node
 		if (ch == '0')
 		{
 			current = current->left;
@@ -114,53 +117,113 @@ void decodeText(HuffmanNode* root, string str)		// Decode the encoded file and w
 			current = current->right;
 		}
 
+		// When we reach the leaf node (both children nodes are NULL), write the corresponding character to the decoded file
 		if (!current->left && !current->right)
 		{
 			decoded_file << current->data;
+			//Reset the current node to the root and go again
 			current = root;
 		}
 	}
-	file.close();									// Close files after reading
+	input_file.close();			// Close files after reading
 	decoded_file.close();
 }
 
 //https://stackoverflow.com/questions/22971794/converting-binary-to-ascii
+//void compressFile()
+//{
+//	ifstream file("encoded.txt");					// Re-open the encoded file, this time for compression
+//	ofstream compressed_file("compressed.txt");		// Along with a file to hold the compressed text
+//	int inChar = 0;
+//	int outChar = 0;
+//	int count = 0;
+//	while ((inChar = file.get()) != EOF)
+//	{
+//		int x = inChar - '0';
+//		// Ignore characters which aren't 0 or 1
+//		if (x == 0 || x == 1)
+//		{
+//			// Accumulate the bit into the output char.
+//			outChar = (outChar << 1) + x;
+//			++count;
+//			if (count == 8)							// 8 bit chunks
+//			{
+//				compressed_file.put(outChar);		// Write the compressed representation of the string of 0's and 1's
+//				outChar = 0;
+//				count = 0;
+//			}
+//		}
+//	}
+//	file.close();									// Close files after reading
+//	compressed_file.close();
+//}
+
 void compressFile()
 {
-	ifstream file("encoded.txt");					// Re-open the encoded file, this time for compression
+	ifstream input_file("encoded.txt");				// Re-open the encoded file, this time for compression
 	ofstream compressed_file("compressed.txt");		// Along with a file to hold the compressed text
-	int inChar = 0;
-	int outChar = 0;
-	int count = 0;
-	while ((inChar = file.get()) != EOF)
+
+	char input_char;
+	bitset<8> output_char;			// Bitset represents a fixed size sequence of bits. In this case used for 8 bit chunks
+	int i = 8;
+
+	while (input_file >> input_char)
 	{
-		int x = inChar - '0';
-		// Ignore characters which aren't 0 or 1
-		if (x == 0 || x == 1)
+		output_char[--i] = input_char - '0';
+
+		if (0 == i)
 		{
-			// Accumulate the bit into the output char.
-			outChar = (outChar << 1) + x;
-			++count;
-			if (count == 8)							// 8 bit chunks
-			{
-				compressed_file.put(outChar);		// Write the compressed representation of the string of 0's and 1's
-				outChar = 0;
-				count = 0;
-			}
+			compressed_file << static_cast<char>(output_char.to_ulong());	// Write the compressed representation of the string of 0's and 1's
+			i = 8; 
 		}
 	}
-	file.close();									// Close files after reading
+
+
+	input_file.close();									// Close files after reading
 	compressed_file.close();
+
+	// TODO add pseudo eof
 }
 
-void decompressFile()		//Decode the compressed file
+void decompressFile(HuffmanNode* root)		//Decode the compressed file
 {
-	ifstream file("compressed.txt");
+	ifstream input_file("compressed.txt");
 	ofstream decompressed_file("decompressed.txt");
 
+	char input_char;
+	string decode_buffer = "";			// String to hold the string of 1's and 0's
+	bitset<8> binary_char;				// Bitset to represent the binary representation of a character
+
+	while (input_file >> input_char)	// While there is another character
+	{
+		binary_char = input_char;
+		decode_buffer += binary_char.to_string();	// Convert from ASCII back to binary representation
+	}
+	cout << decode_buffer;
+
+	HuffmanNode* current = root;		// Set the current root as the Huffman Tree root created previously
+	for (char& ch : decode_buffer)		// For each character read in from the compressed file
+	{
+		if (ch == '0')					
+		{
+			current = current->left;
+		}
+		else
+		{
+			current = current->right;
+		}
+
+		// When we reach the leaf node (both children nodes are NULL), write the corresponding character to the decoded file
+		if (!current->left && !current->right)
+		{
+			decompressed_file << current->data;
+			//Reset the current node to the root and go again
+			current = root;
+		}
+	}
 
 	decompressed_file.close();
-	file.close();
+	input_file.close();
 }
 
 /***************************************************************************************
@@ -176,9 +239,9 @@ void buildHuffmanTree(map<char, int> character_frequencies)
 	// The top or 'internal' node, along with it's two child nodes
 	HuffmanNode *left, *right, *top;
 
-	// Create a binary heap with a min-heap ordering using a priority queue. Elements with high priority (lowest frequency in this case)
-	// are served before elements with lower priorities (most frequent). In this queue the container type is a vector of node pointers. 'compare'
-	// is defined in HuffmanNode.h
+	/* Create a binary heap with a min-heap ordering using a priority queue. Elements with high priority (lowest frequency in this case)
+	   are served before elements with lower priorities (most frequent). In this queue the container type is a vector of node pointers. 'compare'
+	   is defined in HuffmanNode.h */
 	priority_queue<HuffmanNode*, vector<HuffmanNode*>, compare> min_heap;
 
 	// Add each character along with its frequency to the heap. The priority in which the elements are assigned is dictated by the 'compare'
@@ -186,7 +249,6 @@ void buildHuffmanTree(map<char, int> character_frequencies)
 	for (auto elem : character_frequencies)
 	{
 		min_heap.push(new HuffmanNode(elem.first, elem.second));
-		//cout << "PUSH: " << elem.first << " : " << elem.second << "\n";
 	}
 
 	// The heap size is initially the number of unique characters in the frequencies map. Each time around this loop
@@ -194,7 +256,7 @@ void buildHuffmanTree(map<char, int> character_frequencies)
 	// heap is 2, the last 2 elements are placed into the left and right nodes of the final root node and the while loop finishes
 	while (min_heap.size() > 1)
 	{
-		cout << "TOP: " << min_heap.top()->data << " : " << min_heap.top()->frequency << "\n";
+		//cout << "TOP: " << min_heap.top()->data << " : " << min_heap.top()->frequency << "\n";
 
 									//The two lowest frequency nodes are gathered from the queue
 		left = min_heap.top();		// Assign the left child node to the top node in the queue
@@ -221,9 +283,9 @@ void buildHuffmanTree(map<char, int> character_frequencies)
 	printMap(encoded_map);
 
 	writeEncodedText(encoded_map);							// Write the newly encoded map to a file
-	decodeText(min_heap.top(), str);
-	compressFile();
-	decompressFile();
+	decodeText(min_heap.top());								// Decode the string of 1's and 0's to a new file
+	compressFile();											// Again use the encoded file, this time to compress
+	decompressFile(min_heap.top());							// Decompress the file using the tree
 }
 
 
@@ -238,7 +300,7 @@ int main()
 	***************************************************************************************/
 
 	map<char, int> frequency_map;			// Map to hold each unique character and how often it appears
-	getFrequency(frequency_map);			// Populate the map with the frequencies of each character
+	get_frequency(frequency_map);			// Populate the map with the frequencies of each character
 											
 	printMap(frequency_map);				//Print the contents of the map
 
