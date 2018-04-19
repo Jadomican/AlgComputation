@@ -143,7 +143,7 @@ void writeEncodedText(map<char, string>& encoded_map)
 	cout << "\nCOUNT: " << count;
 
 	encoded_file << encoded_map[kPseudoEOF];		// Add the Pseudo End of File marker to signify the end of the text. Adding the
-	encoded_file << encoded_map[kPseudoEOF];		// EOF twice pads out the bits for the compression stage, where 8 bit chunks are required
+//	encoded_file << encoded_map[kPseudoEOF];		// EOF twice pads out the bits for the compression stage, where 8 bit chunks are required
 
 	input_file.close();						// Close both files after reading
 	encoded_file.close();
@@ -226,7 +226,8 @@ void compressFile()
 			}
 		}
 	}
-	
+	cout <<"after loop "<< count << endl;
+
 
 	cout << "\nThere are " << count_compressed_chars << " compressed characters.\n";
 
@@ -234,6 +235,14 @@ void compressFile()
 	if (count > 0)
 	{
 		cout << "\nThere are " << count << " bits that were not used.\n";
+		while (count < 8) {
+			outChar = (outChar << 1) + 0;
+			count++;
+		}
+		count_compressed_chars++;
+		compressed_file.put(outChar);
+		outChar = 0;
+		count = 0;
 	}
 
 
